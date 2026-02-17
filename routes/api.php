@@ -1,8 +1,10 @@
 <?php
 
+use App\Http\Controllers\Api\AssignmentController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\CourseController;
 use App\Http\Controllers\Api\MaterialController;
+use App\Http\Controllers\Api\SubmissionController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -32,3 +34,12 @@ Route::middleware('auth:sanctum', 'role:dosen')->group(function () {
 });
 
 Route::middleware('auth:sanctum')->get('/materials/{id}/download', [MaterialController::class, 'download']);
+
+Route::middleware(['auth:sanctum', 'role:dosen'])->group(function () {
+    Route::post('/assignments', [AssignmentController::class, 'store']);
+    Route::post('/submissions/{id}/grade', [SubmissionController::class, 'grade']);
+});
+
+Route::middleware(['auth:sanctum', 'role:mahasiswa'])->group(function () {
+    Route::post('/submissions', [SubmissionController::class, 'store']);
+});
