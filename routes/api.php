@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\AssignmentController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\CourseController;
+use App\Http\Controllers\Api\DiscussionController;
 use App\Http\Controllers\Api\MaterialController;
 use App\Http\Controllers\Api\SubmissionController;
 use Illuminate\Http\Request;
@@ -42,4 +43,10 @@ Route::middleware(['auth:sanctum', 'role:dosen'])->group(function () {
 
 Route::middleware(['auth:sanctum', 'role:mahasiswa'])->group(function () {
     Route::post('/submissions', [SubmissionController::class, 'store']);
+});
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/discussions', [DiscussionController::class, 'store']);
+    Route::post('/discussions/{id}/reply', [DiscussionController::class, 'reply']);
+    Route::get('/discussions/{id}', [DiscussionController::class, 'show']);
 });
