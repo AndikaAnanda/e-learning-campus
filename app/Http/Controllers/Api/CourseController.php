@@ -23,7 +23,7 @@ class CourseController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate(([
-            'title' => 'required|string|max:255',
+            'name' => 'required|string|max:255',
             'description' => 'nullable|string',
         ]));
 
@@ -49,7 +49,7 @@ class CourseController extends Controller
         }
 
         $validated = $request->validate(([
-            'title' => 'required|string|max:255',
+            'name' => 'required|string|max:255',
             'description' => 'nullable|string',
         ]));
 
@@ -88,7 +88,7 @@ class CourseController extends Controller
             return response()->json(['message' => 'Unauthorized'], 403);
         }
 
-        $course->students()->syncWithoutDetaching($user->id);
+        $course->students()->syncWithoutDetaching([$user->id]);
 
         return response()->json(['message' => 'Berhasil enroll ke course']);
     }
