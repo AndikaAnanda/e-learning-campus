@@ -27,40 +27,29 @@ Route::middleware('auth:sanctum')->group(function (){
         Route::post('/courses', [CourseController::class, 'store']);
         Route::put('/courses/{id}', [CourseController::class, 'update']);
         Route::delete('/courses/{id}', [CourseController::class, 'destroy']);
+
+
+        Route::post('/materials', [MaterialController::class, 'store']);
+
+        Route::post('/assignments', [AssignmentController::class, 'store']);
+        Route::post('/submissions/{id}/grade', [SubmissionController::class, 'grade']);
     });
 
+    Route::middleware(['auth:sanctum', 'role:mahasiswa'])->group(function () {
+        Route::post('/submissions', [SubmissionController::class, 'store']);
+    });
+    
     Route::post('/courses/{id}/enroll', [CourseController::class, 'enroll']);
-});
+    Route::get('/materials/{id}/download', [MaterialController::class, 'download']);
 
-Route::middleware('auth:sanctum', 'role:dosen')->group(function () {
-    Route::post('/materials', [MaterialController::class, 'store']);
-});
-
-Route::middleware('auth:sanctum')->get('/materials/{id}/download', [MaterialController::class, 'download']);
-
-Route::middleware(['auth:sanctum', 'role:dosen'])->group(function () {
-    Route::post('/assignments', [AssignmentController::class, 'store']);
-    Route::post('/submissions/{id}/grade', [SubmissionController::class, 'grade']);
-});
-
-Route::middleware(['auth:sanctum', 'role:mahasiswa'])->group(function () {
-    Route::post('/submissions', [SubmissionController::class, 'store']);
-});
-
-Route::middleware('auth:sanctum')->group(function () {
     Route::post('/discussions', [DiscussionController::class, 'store']);
     Route::post('/discussions/{id}/reply', [DiscussionController::class, 'reply']);
     Route::get('/discussions/{id}', [DiscussionController::class, 'show']);
-});
 
-Route::middleware('auth:sanctum')->group(function () {
     Route::get('/reports/courses', [ReportController::class, 'courseReport']);
     Route::get('/reports/assignments', [ReportController::class, 'assignmentsReport']);
     Route::get('/reports/students/{id}', [ReportController::class, 'studentReport']);
-});
 
-
-Route::middleware('auth:sanctum')->group(function () {
     Route::get('/notifications', [NotificationController::class, 'index']);
     Route::get('/notifications/unread', [NotificationController::class, 'unread']);
     Route::post('/notifications/{id}/read', [NotificationController::class, 'markAsRead']);
