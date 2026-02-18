@@ -5,6 +5,8 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\CourseController;
 use App\Http\Controllers\Api\DiscussionController;
 use App\Http\Controllers\Api\MaterialController;
+use App\Http\Controllers\Api\NotificationController;
+use App\Http\Controllers\Api\ReportController;
 use App\Http\Controllers\Api\SubmissionController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -49,4 +51,19 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/discussions', [DiscussionController::class, 'store']);
     Route::post('/discussions/{id}/reply', [DiscussionController::class, 'reply']);
     Route::get('/discussions/{id}', [DiscussionController::class, 'show']);
+});
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/reports/courses', [ReportController::class, 'courseReport']);
+    Route::get('/reports/assignments', [ReportController::class, 'assignmentsReport']);
+    Route::get('/reports/students/{id}', [ReportController::class, 'studentReport']);
+});
+
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/notifications', [NotificationController::class, 'index']);
+    Route::get('/notifications/unread', [NotificationController::class, 'unread']);
+    Route::post('/notifications/{id}/read', [NotificationController::class, 'markAsRead']);
+    Route::post('/notifications/read-all', [NotificationController::class, 'markAllAsRead']);
+    Route::delete('/notifications/{id}', [NotificationController::class, 'destroy']);
 });

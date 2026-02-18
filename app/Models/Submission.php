@@ -11,10 +11,13 @@ class Submission extends Model
         'student_id',
         'file_path',
         'score',
+        'feedback',
+        'graded_at'
     ];
 
     protected $casts = [
         'score' => 'integer',
+        'graded_at' => 'datetime'
     ];
     // submission dimiliki oleh satu tugas
     public function assignment()

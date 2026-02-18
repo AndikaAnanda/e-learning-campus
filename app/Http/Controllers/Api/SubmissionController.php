@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Submission;
+use App\Notifications\NewGradeNotification;
 use Illuminate\Http\Request;
 
 class SubmissionController extends Controller
@@ -55,10 +56,12 @@ class SubmissionController extends Controller
         $submission->update([
             'score' => $validated['score']
         ]);
-        
+
+        // kirim notifikasi ke mahasiswa
+        $submission->student->notify(new NewGradeNotification($submission));
 
         return response()->json([
-            'message' => 'Nilai berhasil diberikan',
+            'message' => 'Nilai berhasil diberikan, notifikasi dikirim ke mahasiswa',
             'submission' => $submission
         ]);
     }

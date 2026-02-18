@@ -5,7 +5,10 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Assignment;
 use App\Models\Course;
+use App\Notifications\NewAssignmentNotification;
 use Illuminate\Http\Request;
+use Illuminate\Notifications\Notification;
+use Illuminate\Support\Facades\Notification as FacadesNotification;
 
 class AssignmentController extends Controller
 {
@@ -25,11 +28,17 @@ class AssignmentController extends Controller
             return response()->json(['message' => 'Unauthorized'], 403);
         }
 
-        // Create assignment
+        // buat assignment
         $assignment = Assignment::create($validated);
 
+        // kirim notifikasi ke semua mahasiswa yang enroll di course tersebut
+        $students = $course->students;
+        foreach ($students as $student) {
+            $student->notify(new NewAssignmentNotification($assignment));
+        }
+
         return response()->json([
-            'message' => 'Assignment created successfully',
+            'message' => 'Tugas dikirim, notifikasi sudah dikirim ke ' . $students->count() . ' mahasiswa',
             'assignment' => $assignment
         ], 201);
     }   
