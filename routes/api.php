@@ -56,3 +56,12 @@ Route::middleware('auth:sanctum')->group(function (){
     Route::post('/notifications/read-all', [NotificationController::class, 'markAllAsRead']);
     Route::delete('/notifications/{id}', [NotificationController::class, 'destroy']);
 });
+
+// Test route untuk debug
+Route::get('/test-broadcast', function () {
+    broadcast(new \App\Events\NewDiscussionEvent(
+        \App\Models\Discussion::with('user')->first()
+    ));
+    
+    return 'Broadcast sent!';
+});

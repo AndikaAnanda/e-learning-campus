@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Events\NewDiscussionEvent;
+use App\Events\NewReplyEvent;
 use App\Http\Controllers\Controller;
 use App\Models\Discussion;
 use App\Models\Reply;
@@ -22,6 +24,11 @@ class DiscussionController extends Controller
             'content' => $validated['content'],
         ]);
 
+        $discussion->load('user');
+
+        // broadcast event ke semua user yang sedang melihat course ini
+        broadcast(new NewDiscussionEvent($discussion))->toOthers();
+
         return response()->json([
             'message' => 'Diskusi berhasil dibuat',
             'discussion' => $discussion
@@ -41,6 +48,11 @@ class DiscussionController extends Controller
             'user_id' => $request->user()->id,
             'content' => $validated['content'],
         ]);
+
+        $reply->load('user');
+        // broadcast event ke semua user yang sedang melihat diskusi ini
+        broadcast(new NewReplyEvent($reply))->toOthers();
+        
 
         return response()->json([
             'message' => 'Balasan berhasil dibuat',
