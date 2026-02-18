@@ -4,7 +4,6 @@ namespace App\Notifications;
 
 use App\Models\Submission;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
@@ -38,7 +37,7 @@ class NewGradeNotification extends Notification
     {
         $gradeEmoji = $this->getGradeEmoji($this->submission->score);
         $gradeMessage = $this->getGradeMessage($this->submission->score);
-        
+
         return (new MailMessage)
             ->subject($gradeEmoji . ' Nilai Tugas Anda Sudah Keluar!')
             ->greeting('Halo, ' . $notifiable->name . '!')

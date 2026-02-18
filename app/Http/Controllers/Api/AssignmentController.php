@@ -7,8 +7,6 @@ use App\Models\Assignment;
 use App\Models\Course;
 use App\Notifications\NewAssignmentNotification;
 use Illuminate\Http\Request;
-use Illuminate\Notifications\Notification;
-use Illuminate\Support\Facades\Notification as FacadesNotification;
 
 class AssignmentController extends Controller
 {

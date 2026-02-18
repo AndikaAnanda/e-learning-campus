@@ -3,12 +3,14 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 
 class NotificationController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $notifications = auth()->user()->notifications()->paginate(20);
+        $user = $request->user();
+        $notifications = $user->notifications()->paginate(20);
 
         return response()->json([
             'success' => true,
@@ -16,11 +18,10 @@ class NotificationController extends Controller
         ]);
     }
 
-    public function unread()
+    public function unread(Request $request)
     {
-        $notifications = auth()->user()
-                              ->unreadNotifications()
-                              ->get();
+        $user = $request->user();
+        $notifications = $user->unreadNotifications()->get();
 
         return response()->json([
             'success' => true,
@@ -29,12 +30,10 @@ class NotificationController extends Controller
         ]);
     }
 
-    public function markAsRead($id)
+    public function markAsRead(Request $request, $id)
     {
-        $notification = auth()->user()
-                             ->notifications()
-                             ->where('id', $id)
-                             ->first();
+        $user = $request->user();
+        $notification = $user->notifications()->where('id', $id)->first();
 
         if (!$notification) {
             return response()->json([
@@ -51,10 +50,10 @@ class NotificationController extends Controller
         ]);
     }
 
-    public function markAllAsRead()
+    public function markAllAsRead(Request $request)
     {
-        
-        auth()->user()->unreadNotifications->markAsRead();
+        $user = $request->user();
+        $user->unreadNotifications->markAsRead();
 
         return response()->json([
             'success' => true,
@@ -62,9 +61,10 @@ class NotificationController extends Controller
         ]);
     }
 
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
-        $notification = auth()->user()
+        $user = $request->user();
+        $notification = $user
                              ->notifications()
                              ->where('id', $id)
                              ->first();
