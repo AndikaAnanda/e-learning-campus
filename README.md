@@ -112,8 +112,8 @@ Dokumentasi lengkap endpoint tersedia di Postman:
 
 ```bash
 # Clone repository
-git clone <url-repo>
-cd e-learning-kampus
+git clone <https://github.com/AndikaAnanda/e-learning-campus.git>
+cd e-learning-campus
 
 # Install dependencies
 composer install
